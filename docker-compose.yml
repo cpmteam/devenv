@@ -8,3 +8,16 @@ services:
     ports: 
       - 9000:8043
     command: --crt /srv/
+  
+  couchdb:
+    build: cpm-registry-couchapp
+    environment: 
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    ports:
+      - 5984:5984
+    volumes: 
+      - couchdb-data:/data
+
+volumes:
+   couchdb-data:
