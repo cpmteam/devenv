@@ -44,14 +44,19 @@ RUN sed -i -e '/\[httpd\]/a secure_rewrites = false' \
         -e '/\[couch_httpd_auth\]/a public_fields = appdotnet, avatar, avatarMedium, avatarLarge, date, email, fields, freenode, fullname, github, homepage, name, roles, twitter, type, _id, _rev' \
         -e '/\[couch_httpd_auth\]/a nusers_db_public = true' \
         -e '/\[couchdb\]/a delayed_commits = false' \
-        -e '/\[vhosts\]/a 127.0.0.1.xip.io:5984 = \/registry\/_design\/app\/_rewrite' \
         -e '/\[vhosts\]/a registry.127.0.0.1.xip.io = \/registry\/_design\/app\/_rewrite' \
-        /usr/local/etc/couchdb/local.ini
-
-RUN mkdir /data \
+        -e '$a\[cors\]' \
+        /usr/local/etc/couchdb/local.ini \
+  && sed -i -e '/\[httpd\]/a enable_cors = true' \
+        -e '/\[cors\]/a origins = *' \
+        -e '/\[cors\]/a headers	= accept, authorization, cookie, content-type' \
+        -e '/\[cors\]/a methods = GET, PUT, POST, OPTIONS, DELETE, HEAD' \
+        -e '/\[cors\]/a credentials = true' \
+        /usr/local/etc/couchdb/local.ini \
+  && mkdir /data \
   && sed -i -e '/\[couchdb\]/a database_dir = \/data\/' \
-            -e '/\[couchdb\]/a view_index_dir = \/data\/' \
-            /usr/local/etc/couchdb/local.ini
+        -e '/\[couchdb\]/a view_index_dir = \/data\/' \
+        /usr/local/etc/couchdb/local.ini
 
 # download the couchapp
 RUN mkdir -p /usr/src/cpm-registry-couchapp \
