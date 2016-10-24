@@ -1,21 +1,36 @@
 version: '2'
 
 services:
+  haproxy:
+    image: dockercloud/haproxy
+    links:
+      - web
+      - couchdb
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 443:443
+      - 1936:1936
+
   web: 
     image: pierrezemb/gostatic
+    expose:
+      - 8043
+    ports:
+      - 8043:8043
+    environment: 
+      - VIRTUAL_HOST=*
     volumes: 
       - ./cpmteam.github.io/:/srv/http/
-    ports: 
-      - 9000:8043
-    command: --crt /srv/
+    command: --forceHTTP
   
   couchdb:
     build: cpm-registry-couchapp
     environment: 
+      - VIRTUAL_HOST=registry.127.0.0.1.xip.io
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=admin
-    ports:
-      - 5984:5984
     volumes: 
       - couchdb-data:/data
 
