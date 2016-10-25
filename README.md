@@ -16,5 +16,5 @@ docker-compose up -d
 
 After after, will be available some resources
 - http://www.127.0.0.1.xip.io/ - main website
-- http://registry.127.0.0.1.xip.io/ - registry with cpm packages
+- http://registry.127.0.0.1.xip.io/ - registry with cpm packages, replicated from public one, at the build stage
 - http://localhost:5984/_utils/ - Futon portal for CouchDB (admin/admin)
