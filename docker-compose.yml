@@ -2,12 +2,16 @@ version: '2'
 
 services:
   haproxy:
-    image: dockercloud/haproxy
+    # image: dockercloud/haproxy
+    build: haproxy
     links:
       - web
       - couchdb
+    environment: 
+      - CERT_FOLDER=/certs/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - certs:/certs/
     ports:
       - 80:80
       - 443:443
@@ -18,7 +22,7 @@ services:
     expose:
       - 8043
     environment: 
-      - VIRTUAL_HOST=*
+      - VIRTUAL_HOST=https://www.127.0.0.1.xip.io,www.127.0.0.1.xip.io
     volumes: 
       - ./cpmteam.github.io/:/srv/http/
     command: --forceHTTP
@@ -28,7 +32,7 @@ services:
     ports:
       - 5984:5984
     environment: 
-      - VIRTUAL_HOST=registry.127.0.0.1.xip.io
+      - VIRTUAL_HOST=https://registry.127.0.0.1.xip.io,registry.127.0.0.1.xip.io
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=admin
     volumes: 
@@ -36,3 +40,4 @@ services:
 
 volumes:
    couchdb-data:
+   certs:
