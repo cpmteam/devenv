@@ -6,7 +6,7 @@ services:
     image: jmfirth/webpack:7-slim
     container_name: cpmteamdevenv_node
     ports:
-      - 8800:8080
+      - 8800:3000
     environment: 
       - VIRTUAL_HOST=https://www.127.0.0.1.xip.io,www.127.0.0.1.xip.io
     volumes:

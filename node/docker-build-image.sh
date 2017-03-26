@@ -8,7 +8,7 @@ yarn global add rimraf npm-cache
 npm install --cache-min 999999999 --cache /tmp/npm-cache
 
 rm -rf build/
-webpack --progress
-webpack-dev-server --history-api-fallback --inline --progress
+# webpack --progress
+webpack-dev-server --history-api-fallback --inline --progress --host 0.0.0.0 --port 3000
 #npm run build
 
