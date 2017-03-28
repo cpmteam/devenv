@@ -1,22 +1,19 @@
 version: '2'
 
 services:
-  node:
-#    image: node:7.7-slim
-    image: jmfirth/webpack:7-slim
-    container_name: cpmteamdevenv_node
-    ports:
-      - 8800:3000
+  webpack:
+    build: node
     environment: 
       - VIRTUAL_HOST=https://www.127.0.0.1.xip.io,www.127.0.0.1.xip.io
+    expose:
+      - 80
     volumes:
-      - .npm-cache:/tmp/npm-cache
-      - .yarn-cache:/tmp/yarn-cache
       - ./node/:/tmp/node
-      - ./apt-cache:/var/lib/apt/lists/
       - ./cpmteam.github.io/:/workspace
+      - /var/lib/apt/lists/
+      - /workspace/node_modules
     working_dir: /workspace
-    command: /tmp/node/docker-build-image.sh
+    command: /tmp/node/docker-up-image.sh
 
   couchdb:
     build: cpm-registry-couchapp
@@ -29,5 +26,24 @@ services:
     volumes: 
       - couchdb-data:/data
 
+  haproxy:
+    # image: dockercloud/haproxy
+    build: haproxy
+    links:
+      - webpack
+      - couchdb
+    environment: 
+      - CERT_FOLDER=/certs/
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - certs:/certs/
+    ports:
+      - 80:80
+      - 443:443
+      - 1936:1936
+
 volumes:
    couchdb-data:
+   certs:
+
+
