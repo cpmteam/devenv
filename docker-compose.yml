@@ -12,6 +12,7 @@ services:
       - ./cpmteam.github.io/:/workspace
       - /var/lib/apt/lists/
       - /workspace/node_modules
+      - /node-cache
     working_dir: /workspace
     command: /tmp/node/docker-up-image.sh
 

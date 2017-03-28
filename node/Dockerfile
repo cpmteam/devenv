@@ -12,8 +12,8 @@ RUN 	apt-get update && \
 #RUN  yarn global add rimraf npm-cache
 #RUN npm-cache install -c /tmp/npm-cache
 
-RUN npm install --cache-min 999999999
+RUN npm install --cache-min 999999999 --cache /node-cache
 
-VOLUME ["/workspace", "/workspace/node_modules"]
+VOLUME ["/workspace", "/workspace/node_modules", "/node-cache"]
 EXPOSE 80
 CMD ["/root/docker-up-image.sh"]
