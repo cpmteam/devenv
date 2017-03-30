@@ -53,6 +53,7 @@ RUN sed -i -e '/\[httpd\]/a secure_rewrites = false' \
         -e '/\[cors\]/a methods = GET, PUT, POST, OPTIONS, DELETE, HEAD' \
         -e '/\[cors\]/a credentials = true' \
         /usr/local/etc/couchdb/local.ini \
+  && rm -rf /data \
   && mkdir /data \
   && sed -i -e '/\[couchdb\]/a database_dir = \/data\/' \
         -e '/\[couchdb\]/a view_index_dir = \/data\/' \
