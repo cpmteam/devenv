@@ -1,32 +1,21 @@
 version: '2'
 
 services:
-  haproxy:
-    # image: dockercloud/haproxy
-    build: haproxy
-    links:
-      - web
-      - couchdb
-    environment: 
-      - CERT_FOLDER=/certs/
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - certs:/certs/
-    ports:
-      - 80:80
-      - 443:443
-      - 1936:1936
-
-  web: 
-    image: pierrezemb/gostatic
-    expose:
-      - 8043
+  webpack:
+    build: node
     environment: 
       - VIRTUAL_HOST=https://www.127.0.0.1.xip.io,www.127.0.0.1.xip.io
-    volumes: 
-      - ./cpmteam.github.io/:/srv/http/
-    command: --forceHTTP
-  
+    expose:
+      - 80
+    volumes:
+      - ./node/:/tmp/node
+      - ./cpmteam.github.io/:/workspace
+      - /var/lib/apt/lists/
+      - /workspace/node_modules
+      - /node-cache
+    working_dir: /workspace
+    command: /tmp/node/docker-up-image.sh
+
   couchdb:
     build: cpm-registry-couchapp
     ports:
@@ -38,6 +27,24 @@ services:
     volumes: 
       - couchdb-data:/data
 
+  haproxy:
+    # image: dockercloud/haproxy
+    build: haproxy
+    links:
+      - webpack
+      - couchdb
+    environment: 
+      - CERT_FOLDER=/certs/
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - certs:/certs/
+    ports:
+      - 80:80
+      - 443:443
+      - 1936:1936
+
 volumes:
    couchdb-data:
    certs:
+
+
