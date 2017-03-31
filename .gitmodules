@@ -1,3 +1,4 @@
 [submodule "cpmteam.github.io"]
 	path = cpmteam.github.io
 	url = git@github.com:cpmteam/cpmteam.github.io.git
+	branch = source
